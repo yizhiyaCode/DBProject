@@ -4,7 +4,6 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 
-	"encoding/json"
 	"github.com/jinzhu/gorm"
 	"resource"
 	"strings"
@@ -35,13 +34,14 @@ func init() {
 		return
 	}
 
-	create()
+	create(Like{})
 }
 
 //创建表
-func create() bool {
-	if !db.HasTable(&Like{}) {
-		if err := db.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8").CreateTable(&Like{}).Error; err != nil {
+func create(like Like) bool {
+	if !db.HasTable(&like) {
+		if err := db.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8").CreateTable(&like).
+			Error; err != nil {
 			return false
 		}
 	}
@@ -103,7 +103,7 @@ func selectAll() (like []Like) {
 
 func main() {
 	//like := &Like{
-	//	Ip:        ip,
+	//	Ip:        "ip",
 	//	Ua:        "ua",
 	//	Title:     "hello world ",
 	//	CreatedAt: time.Now(),
@@ -114,11 +114,11 @@ func main() {
 	//like := selectById(1)
 	//j,_ :=json.MarshalIndent(like,"","   ")
 	//fmt.Println(string(j))
-	like := selectById(1)
-	for i, value := range like {
-		j, _ := json.MarshalIndent(value, "", "   ")
-		fmt.Printf(" like %d  %s \n", i+1, string(j))
-	}
+	//like := selectById(1)
+	//for i, value := range like {
+	//	j, _ := json.MarshalIndent(value, "", "   ")
+	//	fmt.Printf(" like %d  %s \n", i+1, string(j))
+	//}
 
 	fmt.Printf("hello world")
 }
